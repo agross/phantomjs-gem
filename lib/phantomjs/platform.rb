@@ -98,7 +98,7 @@ module Phantomjs
         end
 
         def package_url
-          'https://github.com/bprodoehl/phantomjs/releases/download/v2.0.0-20150528/phantomjs-2.0.0-20150528-u1404-x86_64.zip'
+          'https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2'
         end
       end
     end
