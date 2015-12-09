@@ -59,8 +59,7 @@ module Phantomjs
 
           case package_url.split('.').last
             when 'bz2'
-              system "bunzip2 #{File.basename(package_url)}"
-              system "tar xf #{File.basename(package_url).sub(/\.bz2$/, '')}"
+              bunzip(File.basename(package_url))
             when 'zip'
               unzip(File.basename(package_url))
             else
@@ -70,7 +69,7 @@ module Phantomjs
           # Find the phantomjs build we just extracted
           extracted_dir = Dir['phantomjs*'].find { |path| File.directory?(path) }
 
-          fail "Could not find phantomjs binary in #{File.join(Dir.pwd, 'phantomjs*')}" if extracted_dir.nil?
+          fail "Could not find extracted phantomjs directory in #{File.join(Dir.pwd, 'phantomjs*')}" if extracted_dir.nil?
 
           # Move the extracted phantomjs build to $HOME/.phantomjs/version/platform
           if FileUtils.mv extracted_dir, File.join(Phantomjs.base_dir, platform)
@@ -91,6 +90,18 @@ module Phantomjs
       end
 
       private
+      def bunzip(file)
+        bunzip = %W(bunzip2 #{file})
+        system(*bunzip)
+
+        tarfile = file.sub(/\.bz2$/, '')
+        directory = File.join(File.basename(tarfile, File.extname(tarfile)), 'bin')
+        FileUtils.mkdir_p(directory)
+
+        tar = %W(tar -xf #{tarfile} --directory=#{directory})
+        system(*tar)
+      end
+
       def unzip(file)
         # Overwrite existing files.
         Zip.on_exists_proc = true
@@ -114,7 +125,7 @@ module Phantomjs
         end
 
         def package_url
-          'https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2'
+          "https://s3.amazonaws.com/travis-phantomjs/phantomjs-#{Phantomjs.version}-ubuntu-12.04.tar.bz2"
         end
       end
     end
@@ -130,7 +141,7 @@ module Phantomjs
         end
 
         def package_url
-          'https://s3.amazonaws.com/travis-phantomjs/phantomjs-2.0.0-ubuntu-12.04.tar.bz2'
+          "https://s3.amazonaws.com/travis-phantomjs/phantomjs-#{Phantomjs.version}-ubuntu-12.04.tar.bz2"
         end
       end
     end
@@ -146,7 +157,7 @@ module Phantomjs
         end
 
         def package_url
-          'https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-macosx.zip'
+          "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-#{Phantomjs.version}-macosx.zip"
         end
       end
     end
@@ -165,12 +176,12 @@ module Phantomjs
           if system_phantomjs_installed?
             system_phantomjs_path
           else
-            File.expand_path File.join(Phantomjs.base_dir, platform, 'phantomjs.exe')
+            File.expand_path File.join(Phantomjs.base_dir, platform, 'bin', 'phantomjs.exe')
           end
         end
 
         def package_url
-          'https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-1.9.8-windows.zip'
+          "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-#{Phantomjs.version}-windows.zip"
         end
       end
     end
