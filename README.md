@@ -11,7 +11,7 @@ install the prebuilt packages suitable for the current plattform (currently Linu
 
 If there is a phantomjs executable in your `$PATH` that matches the version number packaged in this gem, this one will be used instead of installing one in your `$HOME/.phantomjs`.
 
-You will need `cURL` or `wget` on your system. For extraction, `bunzip2` and `tar` are required on Linux, and `unzip` on OS X. They should be installed already.
+For extraction, `bunzip2` and `tar` are required on Linux. They should be installed already.
 
 **TL;DR:** Instead of manually installing phantomjs on your machines, use this gem. It will take care of it.
 
