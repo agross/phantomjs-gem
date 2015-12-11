@@ -213,7 +213,7 @@ module Phantomjs
         end
 
         def package_url
-          "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-#{Phantomjs.version}-macosx.zip"
+          'https://github.com/Vitallium/phantomjs/releases/download/2.0.1/phantomjs-2.0.1-macosx.zip'
         end
       end
     end
